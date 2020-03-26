@@ -1,0 +1,10 @@
+<h1>This is the Campgrounds Page</h1>
+<% campsData.forEach(camp => { %>
+    <div>
+        <h4>
+            <%= camp.title %>
+            </h4>
+        <img src="<%=camp.image%>" width="500" height="500">
+        
+        </div>
+<% }); %>
