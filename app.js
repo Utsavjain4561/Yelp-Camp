@@ -16,6 +16,6 @@ app.get("/campgrounds",(req,res)=>{
     ]
     res.render("campgrounds",{campsData:camps});
 });
-app.listen(3000,"localhost",()=>{
+app.listen(3001,"localhost",()=>{
     console.log("Yelp Camp has started");
 });
