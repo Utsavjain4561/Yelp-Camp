@@ -1,0 +1,19 @@
+{
+    "name": "mongodb-server",
+    "version": "1.0.0",
+    "description": "mongodb server in an npm package",
+    "main": "lib/mongodb-server.js",
+    "author": {
+        "name": "Minh.T",
+        "email": "gtdminh@gmail.com"
+    },
+    "license": "MIT",
+    "bin": {
+        "mongod": "./bin/mongod"
+    },
+    "readme": "README.md",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:gtdminh/mongodb-server.git"
+    }
+}

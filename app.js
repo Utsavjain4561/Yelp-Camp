@@ -12,6 +12,7 @@ app.set("view engine","ejs");
 var campgroundsSchema = new mongoose.Schema({
     title:String,
     image:String,
+    description:String
 });
 var Campground = mongoose.model('Campground',campgroundsSchema);
 // var camps=[
@@ -31,7 +32,7 @@ app.get("/campgrounds",(req,res)=>{
             console.log("OOPS can't find campgrounds!!");
             console.log(err);
         }else{
-            res.render("campgrounds",{campsData:camps});
+            res.render("index",{campsData:camps});
         }
     });
    
@@ -39,7 +40,8 @@ app.get("/campgrounds",(req,res)=>{
 app.post("/campgrounds",(req,res)=>{
     var name = req.body.name;
     var image = req.body.image;
-    var newCampground = {title:name,image:image};
+    var description = req.body.description;
+    var newCampground = {title:name,image:image,description:description};
    
     Campground.create(newCampground,(err,newCampground)=>{
         if(err){
@@ -56,6 +58,20 @@ app.post("/campgrounds",(req,res)=>{
 });
 app.get("/campgrounds/new",(req,res)=>{
     res.render("new");
+});
+app.get("/campgrounds/:id",(req,res)=>{
+    // var id = mongoose.Types.ObjectId(req.params.id);
+    Campground.findById(req.params.id,(err,camp)=>{
+        if(err){
+            console.log("Not found");
+            console.log(err);
+        }else{
+        console.log(camp);
+        res.render("show",{campsData:camp});
+        }
+    });
+
+    
 });
 app.listen(3000,"localhost",()=>{
     console.log("Yelp Camp has started");
