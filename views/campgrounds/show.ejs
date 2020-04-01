@@ -1,0 +1,46 @@
+<%- include('../partials/header') %> 
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Yelp Camp</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info 1</li>
+                <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="thumbnail">
+                <img src=<%=campsData.image%>>
+                <div class="caption-full">
+                    <h4 class="pull-right"> 
+                        Rs 500/night
+                    </h4>
+                    <h4>
+                        <a href="#"><%= campsData.title%></a>
+                    </h4>
+                    <p> <%=campsData.description %></p> 
+                </div>
+                <div class="well">
+                    <div class="text-right">
+                        <a class="btn btn-success" href="/campgrounds/<%=campsData._id%>/comments/new">Add New Comment</a>
+                    </div>
+                    <hr>
+                    <%campsData.comments.forEach(comment =>{%>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong><%=comment.author%></strong>
+                                <span class="pull-rigth">10 Days Ago</span>
+                                <p> <%=comment.text%></p>
+                            </div>
+                        </div>
+                        
+                    <%});%>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 
