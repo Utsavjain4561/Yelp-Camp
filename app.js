@@ -5,6 +5,7 @@ const express      = require("express");
     passport   = require("passport");
     LocalStrategy = require("passport-local");
     expressSession = require("express-session");
+    methodOverride = require("method-override");
     Campground = require('./models/campground');
     Comment    = require("./models/comments");
     seedDB     = require("./seed");
@@ -18,6 +19,7 @@ mongoose.connect("mongodb://localhost/yelp_camp",{useNewUrlParser:true ,useUnifi
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
 app.use(express.static(__dirname+'/public'));
+app.use(methodOverride("_method"));
 //seedDB();
 
 //PASSPORT cinfigurations

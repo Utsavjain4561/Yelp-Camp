@@ -23,6 +23,12 @@
                     <p> <em>
                         Submitted By <%= campsData.author.username%>
                     </em> </p>
+
+                    <a href="/campgrounds/<%=campsData._id%>/edit "class="btn btn-warning" href="#">Edit</a>
+                    <form action="/campgrounds/<%=campsData._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    
                 </div>
                 <div class="well">
                     <div class="text-right">
