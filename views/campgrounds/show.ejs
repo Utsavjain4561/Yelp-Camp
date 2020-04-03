@@ -20,6 +20,9 @@
                         <a href="#"><%= campsData.title%></a>
                     </h4>
                     <p> <%=campsData.description %></p> 
+                    <p> <em>
+                        Submitted By <%= campsData.author.username%>
+                    </em> </p>
                 </div>
                 <div class="well">
                     <div class="text-right">
@@ -29,9 +32,11 @@
                     <%campsData.comments.forEach(comment =>{%>
                         <div class="row">
                             <div class="col-md-12">
-                                <strong><%=comment.author%></strong>
+                                <strong><%=comment.author.username%></strong>
                                 <span class="pull-rigth">10 Days Ago</span>
+                                
                                 <p> <%=comment.text%></p>
+                                
                             </div>
                         </div>
                         

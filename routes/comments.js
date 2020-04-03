@@ -23,8 +23,12 @@ router.post("/",isLoggedIn,(req,res)=>{
                 if(err){
                     console.log(err);
                 }else{
+                    comment.author.id = req.user._id;
+                    comment.author.username = req.user.username;
+                    comment.save();
                     camp.comments.push(comment);
                     camp.save();
+                    console.log("New comment added "+comment);
                     res.redirect("/campgrounds/"+req.params.id);
                 }
             });

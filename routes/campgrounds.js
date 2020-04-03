@@ -7,31 +7,38 @@ router.get("/",(req,res)=>{
             console.log("OOPS can't find campgrounds!!");
             console.log(err);
         }else{
+            console.log("User whoe created "+camps);
             res.render("campgrounds/index",{campsData:camps,currentUser:req.user});
         }
     });
    
 });
-router.post("/",(req,res)=>{
+router.post("/",isLoggedIn,(req,res)=>{
     var name = req.body.name;
     var image = req.body.image;
     var description = req.body.description;
-    var newCampground = {title:name,image:image,description:description};
+    var author = {
+        id:req.user._id,
+        username:req.user.username
+    };
+    console.log(req.user);
+    var newlyCampground = {title:name,image:image,description:description,author:author};
    
-    Campground.create(newCampground,(err,newCampground)=>{
+   
+    Campground.create(newlyCampground,(err,newCampground)=>{
         if(err){
             console.log("Its an ERROR!!");
             confirm.log(err);
         }
         else{
-            
+            console.log(newCampground);
             res.redirect("/campgrounds");
         }
     });
 
     
 });
-router.get("/new",(req,res)=>{
+router.get("/new",isLoggedIn,(req,res)=>{
     res.render("campgrounds/new",{currentUser:req.user});
 });
 router.get("/:id",(req,res)=>{
@@ -48,5 +55,11 @@ router.get("/:id",(req,res)=>{
 
     
 });
+function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 module.exports = router;
