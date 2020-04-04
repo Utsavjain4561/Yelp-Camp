@@ -1,9 +1,11 @@
 var express = require("express");
     Campground    = require("../models/campground");
     Comments    = require("../models/comments");
+    middleware = require("../middleware");
     router  = express.Router({mergeParams:true});
+    
 //COMMENTS route
-router.get("/new",isLoggedIn,(req,res)=>{
+router.get("/new",middleware.isLoggedIn,(req,res)=>{
     Campground.findById(req.params.id,(err,campground)=>{
         if(err){
             console.log(err);
@@ -13,7 +15,7 @@ router.get("/new",isLoggedIn,(req,res)=>{
     });
 
 });
-router.post("/",isLoggedIn,(req,res)=>{
+router.post("/",middleware.isLoggedIn,(req,res)=>{
     Campground.findById(req.params.id,(err,camp)=>{
         if(err){
             console.log(err);
@@ -35,7 +37,7 @@ router.post("/",isLoggedIn,(req,res)=>{
         }
     });
 });
-router.get("/:comment_id/edit",checkOwnership,(req,res)=>{
+router.get("/:comment_id/edit",middleware.checkCommentOwnership,(req,res)=>{
     Comments.findById(req.params.comment_id,(err,foundComment)=>{
         
             res.render("comments/edit",{comment:foundComment,campgroundID:req.params.id});
@@ -44,7 +46,7 @@ router.get("/:comment_id/edit",checkOwnership,(req,res)=>{
     
 });
 
-router.put("/:comment_id",checkOwnership,(req,res)=>{
+router.put("/:comment_id",middleware.checkCommentOwnership,(req,res)=>{
     Comments.findByIdAndUpdate(req.params.comment_id,req.body.comment,(err,updatedComment)=>{
         
             res.redirect("/campgrounds/"+req.params.id);
@@ -52,34 +54,10 @@ router.put("/:comment_id",checkOwnership,(req,res)=>{
     });
     
 });
-router.delete("/:comment_id",checkOwnership,(req,res)=>{
+router.delete("/:comment_id",middleware.checkCommentOwnership,(req,res)=>{
     Comments.findByIdAndRemove(req.params.comment_id,(err)=>{
         res.redirect("back");
     });
 });
-function isLoggedIn(req,res,next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
-function checkOwnership(req,res,next){
-    if(req.isAuthenticated()){
-        
-        Comments.findById(req.params.comment_id,(err,editComment)=>{
-            if(err){
-                res.redirect("back");
-            }else{
-                if(editComment.author.id.equals(req.user._id)){
-                    console.log("User is Authorized !!!!");
-                    next();
-            }else{
-                    res.redirect("back");
-                }
-            }           
-        });
-    }else{
-        res.redirect("back");
-    }
-}
+
 module.exports = router;
