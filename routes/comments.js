@@ -35,10 +35,51 @@ router.post("/",isLoggedIn,(req,res)=>{
         }
     });
 });
+router.get("/:comment_id/edit",checkOwnership,(req,res)=>{
+    Comments.findById(req.params.comment_id,(err,foundComment)=>{
+        
+            res.render("comments/edit",{comment:foundComment,campgroundID:req.params.id});
+        
+    }); 
+    
+});
+
+router.put("/:comment_id",checkOwnership,(req,res)=>{
+    Comments.findByIdAndUpdate(req.params.comment_id,req.body.comment,(err,updatedComment)=>{
+        
+            res.redirect("/campgrounds/"+req.params.id);
+        
+    });
+    
+});
+router.delete("/:comment_id",checkOwnership,(req,res)=>{
+    Comments.findByIdAndRemove(req.params.comment_id,(err)=>{
+        res.redirect("back");
+    });
+});
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated()){
         return next();
     }
     res.redirect("/login");
+}
+function checkOwnership(req,res,next){
+    if(req.isAuthenticated()){
+        
+        Comments.findById(req.params.comment_id,(err,editComment)=>{
+            if(err){
+                res.redirect("back");
+            }else{
+                if(editComment.author.id.equals(req.user._id)){
+                    console.log("User is Authorized !!!!");
+                    next();
+            }else{
+                    res.redirect("back");
+                }
+            }           
+        });
+    }else{
+        res.redirect("back");
+    }
 }
 module.exports = router;
