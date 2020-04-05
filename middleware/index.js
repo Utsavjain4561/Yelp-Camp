@@ -6,6 +6,7 @@ middlewareObj.isLoggedIn = function(req,res,next){
     if(req.isAuthenticated()){
         return next();
     }
+    req.flash("error","You have to Login first to do that");
     res.redirect("/login");
 }
 middlewareObj.checkCommentOwnership = function (req,res,next){
@@ -13,17 +14,20 @@ middlewareObj.checkCommentOwnership = function (req,res,next){
         
         Comments.findById(req.params.comment_id,(err,editComment)=>{
             if(err){
+                req.flash("error","Comment not found");
                 res.redirect("back");
             }else{
                 if(editComment.author.id.equals(req.user._id)){
-                    console.log("User is Authorized !!!!");
+                    
                     next();
             }else{
+                    req.flash("error","Permission denied");
                     res.redirect("back");
                 }
             }           
         });
     }else{
+        req.flash("error","You don't have permission to do this");
         res.redirect("back");
     }
 }
@@ -32,17 +36,20 @@ middlewareObj.checkCampgroundOwnership = function (req,res,next){
         
         Campground.findById(req.params.id,(err,editCampground)=>{
             if(err){
+                req.flash("error","Campground not found");
                 res.redirect("back");
             }else{
                 if(editCampground.author.id.equals(req.user._id)){
-                    console.log("User is Authorized !!!!");
+                    req.flash("success","Edit Successfull");
                     next();
             }else{
+                    req.flash("error","Permission Denied");  
                     res.redirect("back");
                 }
             }           
         });
     }else{
+        req.flash("error","You don't have permission to do this");
         res.redirect("back");
     }
 }
