@@ -1,3 +1,39 @@
+/* eslint-env browser */
+
+'use strict';
+
+require('./driver').set(require('./drivers/browser'));
+
+const DocumentProvider = require('./document_provider.js');
+const PromiseProvider = require('./promise_provider');
+
+DocumentProvider.setBrowser(true);
+
+/**
+ * The Mongoose [Promise](#promise_Promise) constructor.
+ *
+ * @method Promise
+ * @api public
+ */
+
+Object.defineProperty(exports, 'Promise', {
+  get: function() {
+    return PromiseProvider.get();
+  },
+  set: function(lib) {
+    PromiseProvider.set(lib);
+  }
+});
+
+/**
+ * Storage layer for mongoose promises
+ *
+ * @method PromiseProvider
+ * @api public
+ */
+
+exports.PromiseProvider = PromiseProvider;
+
 /**
  * The [MongooseError](#error_MongooseError) constructor.
  *
@@ -5,7 +41,7 @@
  * @api public
  */
 
-exports.Error = require('./error');
+exports.Error = require('./error/index');
 
 /**
  * The Mongoose [Schema](#schema_Schema) constructor
@@ -85,7 +121,29 @@ exports.utils = require('./utils.js');
  * @method Document
  * @api public
  */
-exports.Document = require('./document_provider.js')();
+exports.Document = DocumentProvider();
+
+/**
+ * Return a new browser model. In the browser, a model is just
+ * a simplified document with a schema - it does **not** have
+ * functions like `findOne()`, etc.
+ *
+ * @method model
+ * @api public
+ * @param {String} name
+ * @param {Schema} schema
+ * @return Class
+ */
+exports.model = function(name, schema) {
+  class Model extends exports.Document {
+    constructor(obj, fields) {
+      super(obj, schema, fields);
+    }
+  }
+  Model.modelName = name;
+
+  return Model;
+};
 
 /*!
  * Module exports.

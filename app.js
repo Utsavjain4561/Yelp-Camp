@@ -16,7 +16,9 @@ const express      = require("express");
     indexRoutes = require("./routes/index");
 
 app = express();
-mongoose.connect("mongodb://localhost/yelp_camp",{useNewUrlParser:true ,useUnifiedTopology: true}); 
+mongoose.connect("mongodb+srv://utsav:suddendeath123@@cluster0-tgadk.mongodb.net/test?retryWrites=true&w=majority"
+,{useNewUrlParser:true ,useCreateIndex:true,useUnifiedTopology: true});
+//mongoose.connect("mongodb://localhost/yelp_camp",{useNewUrlParser:true ,useUnifiedTopology: true}); 
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
 app.use(express.static(__dirname+'/public'));
